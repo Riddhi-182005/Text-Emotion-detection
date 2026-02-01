@@ -1,9 +1,4 @@
-import streamlit as st
 from transformers import pipeline
-
-st.title("Text Emotion Detector")
-
-st.write("Type a sentence and the model will detect the emotion.")
 
 # Load pre-trained emotion model
 emotion_model = pipeline(
@@ -12,13 +7,14 @@ emotion_model = pipeline(
     return_all_scores=True
 )
 
-text = st.text_input("Enter your text here")
+# Take input from user
+text = input("Enter a sentence to detect emotion: ")
 
-if text:
-    predictions = emotion_model(text)[0]
+# Predict emotion
+predictions = emotion_model(text)[0]
+best_emotion = max(predictions, key=lambda x: x["score"])
 
-    best_emotion = max(predictions, key=lambda x: x["score"])
-
-    st.subheader("Result")
-    st.write(f"Emotion: {best_emotion['label']}")
-    st.write(f"Confidence: {best_emotion['score']*100:.2f}%")
+# Print results
+print("\nResult:")
+print("Emotion:", best_emotion['label'])
+print("Confidence:", round(best_emotion['score']*100, 2), "%")
