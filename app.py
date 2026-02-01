@@ -1,20 +1,14 @@
 from transformers import pipeline
 
-# Load pre-trained emotion model
-emotion_model = pipeline(
+classifier = pipeline(
     "text-classification",
     model="j-hartmann/emotion-english-distilroberta-base",
-    return_all_scores=True
+    return_all_scores=False
 )
 
-# Take input from user
 text = input("Enter a sentence to detect emotion: ")
 
-# Predict emotion
-predictions = emotion_model(text)[0]
-best_emotion = max(predictions, key=lambda x: x["score"])
+predictions = classifier(text)[0]
 
-# Print results
-print("\nResult:")
-print("Emotion:", best_emotion['label'])
-print("Confidence:", round(best_emotion['score']*100, 2), "%")
+print("Detected Emotion:", predictions["label"])
+print("Confidence Score:", round(predictions["score"], 2))
